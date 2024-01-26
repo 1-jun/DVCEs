@@ -66,6 +66,5 @@ metadata = pd.read_csv(metadata)
 metadata
 #%%
 show_jpgs(subject_id=19997367, study_id=58801152)
-# %%
 row = metadata[metadata['study_id']==58801152]
-row
+print(row)
