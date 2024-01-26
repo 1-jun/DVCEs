@@ -439,7 +439,7 @@ class GaussianDiffusion:
         #model_kwargs['variance'] = p_mean_var["variance"]
         gradient = cond_fn(x, self._scale_timesteps(t), **model_kwargs)
         del model_kwargs['eps']#, model_kwargs['variance']
-        print('gradient norms before', gradient.view(x.shape[0], -1).norm(p=2, dim=1))
+        # print('gradient norms before', gradient.view(x.shape[0], -1).norm(p=2, dim=1))
         #gradient /= gradient.view(x.shape[0], -1).norm(p=2, dim=1).view(x.shape[0], 1, 1, 1)
         #print('gradient norms after', gradient.view(x.shape[0], -1).norm(p=2, dim=1))
         new_mean = p_mean_var["mean"].float() + p_mean_var["variance"] * gradient.float() #* 200
@@ -639,14 +639,12 @@ class GaussianDiffusion:
             indices = tqdm(indices)
 
         if randomize_class and "y" in model_kwargs:
-            print(model.num_classes, model_kwargs["y"].shape, model_kwargs["y"].device)
             model_kwargs["y"] = th.randint(
                 low=0,
                 high=model.num_classes,
                 size=model_kwargs["y"].shape,
                 device=model_kwargs["y"].device,
             )
-            print('classes start are', model_kwargs["y"])
         for i in indices:
             t = th.tensor([i] * shape[0], device=device)
 
@@ -672,10 +670,7 @@ class GaussianDiffusion:
 
 
                 if postprocess_fn is not None:
-                    print('out keys1', out.keys())
                     out = postprocess_fn(out, t)
-                    print('out keys2', out.keys())
-                print('out keys3', out.keys())
                 yield out
                 img = out["sample"]
 
@@ -843,8 +838,6 @@ class GaussianDiffusion:
         scales = np.repeat(scales, len(indices) // len(scales))
         scales = list(scales) + [scales[-1]] * (len(indices) - len(scales))
 
-        print('scales used', scales)
-        print('q sampling for indices', indices)
         #init_image_batch = th.tile(init_image, dims=(batch_size, 1, 1, 1))
         img = self.q_sample(
             x_start=init_image,
@@ -874,7 +867,6 @@ class GaussianDiffusion:
 
         for i in indices:
             t = th.tensor([i] * shape[0], device=device)
-            print('curr t', t)
             if randomize_class and "y" in model_kwargs:
                 model_kwargs["y"] = th.randint(
                     low=0,
