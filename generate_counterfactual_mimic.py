@@ -351,10 +351,10 @@ def generate_counterfactual(attack_module, image, target_class):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--diffusion_ckpt_path', type=str,
-                        default='/media/wonjun/m2/repos/pnp/guided-diffusion/training_checkpoints_oldcode_1171_1171/model050000.pt',
+                        default='MIMIC_diffusion.pt',
                         help='Path to pretraind diffusion model')
     parser.add_argument('--robust_classifier_path', type=str,
-                        default = '/media/wonjun/m2/repos/pnp/classifiers/robust_red_936_937/30_checkpoint.pt',
+                        default = 'biased_edema_classifier_robust.pt',
                         help='Path to pretrained robust classifier')
     parser.add_argument('--mimic_path', type=str,
                         default='/media/wonjun/HDD8TB/mimic-cxr-jpg-resized512',
@@ -367,7 +367,7 @@ def main():
                         help='dictionary (written out in string) containing the class labels used for training the robust classifier')
     parser.add_argument('--target_class', default=0, choices=[0,1], type=int,
                         help='class label of counterfactual')
-    args = parser.parse_args("")
+    args = parser.parse_args()
 
     negbio_labels = pd.read_csv(os.path.join(args.mimic_path, 'mimic-cxr-2.0.0-negbio.csv'))
     metadata = pd.read_csv(os.path.join(args.mimic_path, 'mimic-cxr-2.0.0-metadata.csv'))

@@ -3,3 +3,4 @@
 /logs/*
 /ImageNetVCEs/
 **/__pycache__/
+*.pt
